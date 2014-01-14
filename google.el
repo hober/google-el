@@ -73,6 +73,11 @@ Note that this is required by Google's terms of service."
 (defun google-response (buf)
   "Extract the JSON response from BUF."
   (with-current-buffer buf
+    (setq case-fold-search nil)
+    (save-excursion
+      (goto-char (point-min))
+      (when (re-search-forward "charset=utf-8" nil t)
+        (set-buffer-multibyte t)))
     (goto-char url-http-end-of-headers)
     (prog1 (json-read)
       (kill-buffer buf))))
